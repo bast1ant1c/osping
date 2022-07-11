@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#Author: Bast1ant1c
+
+echo '''
+[*] Operating System Detection ...
+'''
+pingstatus=$(ping -c 1 $1 2>/dev/null)
+status=$(echo $?)
+
+if [ $status = 0 ];then
+	ttl=$(ping -c 1 $1 | grep ttl | awk '{print $6}'| cut -d "=" -f2)
+		if [ $ttl -le 64 ]; then
+        		echo "[+] $1 ttl=$ttl >> Linux" 
+		elif [ $ttl -le 128 ]; then
+			echo "[+] $1 ttl=$ttl >> Windows"
+		elif [ $ttl -gt 128 ]; then 
+		        echo "[+] $1 ttl=$ttl >> N.P.I."
+		fi
+else
+	echo '''[*] Host unreachable, try again
+[*] Use
+[+] osping <IP>
+'''
+fi
